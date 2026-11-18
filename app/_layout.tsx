@@ -8,6 +8,7 @@ export default function RootLayout() {
     <>
       <Stack>
         <Stack.Screen name="index" options={{ title: 'Home' }} />
+        <Stack.Screen name="onboarding" options={{ title: 'Onboarding' }} />
       </Stack>
       <StatusBar style="auto" />
     </>
