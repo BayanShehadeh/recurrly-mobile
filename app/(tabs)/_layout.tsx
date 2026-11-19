@@ -7,6 +7,7 @@ export default function TabsLayout() {
       <Tabs.Screen name="subscriptions" options={{ title: 'Subscriptions' }} />
       <Tabs.Screen name="insights" options={{ title: 'Insights' }} />
       <Tabs.Screen name="settings" options={{ title: 'Settings' }} />
+      <Tabs.Screen name="subscriptions/[id]" options={{ href: null }} />
     </Tabs>
   );
 }
