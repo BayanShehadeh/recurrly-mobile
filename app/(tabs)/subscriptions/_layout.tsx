@@ -1,9 +1,10 @@
-import { Tabs } from "expo-router";
+import { Stack } from 'expo-router';
 
-const TabLayout = () => (
-  <Tabs screenOptions={{ headerShown: false }}>
-    <Tabs.Screen name="index" options={{ title: 'Home' }} />
-  </Tabs>
-)
-
-export default TabLayout
+export default function SubscriptionsLayout() {
+  return (
+    <Stack>
+      <Stack.Screen name="index" options={{ title: 'Subscriptions' }} />
+      <Stack.Screen name="[id]" options={{ title: 'Details' }} />
+    </Stack>
+  );
+}
