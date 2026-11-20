@@ -51,15 +51,17 @@
     }
 
     .tabs-pill {
-        @apply size-12 items-center justify-center rounded-full bg-transparent;
+        @apply size-12 items-center justify-center rounded-full overflow-hidden;
     }
 
     .tabs-active {
-        @apply bg-accent;
+        background-color: #ea7a53;
     }
 
     .tabs-glyph {
         @apply size-6;
+        width: 24px;
+        height: 24px;
     }
 
     .home-header {
