@@ -1,8 +1,8 @@
 import { HOME_BALANCE, HOME_USER } from "@/constants/data";
 import { icons } from "@/constants/icon";
 import images from "@/constants/images";
+import { formatCurrency, formatDate } from "@/constants/lib/utils";
 import { colors, spacing } from "@/constants/them";
-import dayjs from "dayjs";
 import { Image as ExpoImage } from "expo-image";
 import { styled } from "nativewind";
 import { StyleSheet, Text, View } from "react-native";
@@ -26,8 +26,8 @@ const user = {
 };
 
 const balance = {
-  amount: HOME_BALANCE.amount,
-  nextRenewalDate: dayjs(HOME_BALANCE.nextRenewalDate).format("MM/DD"),
+  amount: formatCurrency(HOME_BALANCE.amount),
+  nextRenewalDate: formatDate(HOME_BALANCE.nextRenewalDate),
 };
 
 export default function App() {
@@ -37,7 +37,14 @@ export default function App() {
         <View style={styles.header}>
           <View style={styles.user}>
             <Image source={user.avatar} style={styles.avatar} />
-            <Text style={styles.userName}>{user.name}</Text>
+            <Text
+              style={styles.userName}
+              numberOfLines={1}
+              adjustsFontSizeToFit
+              minimumFontScale={0.75}
+            >
+              {user.name}
+            </Text>
           </View>
 
           <View style={styles.addButton}>
@@ -53,12 +60,7 @@ export default function App() {
           <Text style={styles.balanceLabel}>Balance</Text>
 
           <View style={styles.balanceRow}>
-            <Text style={styles.balanceAmount}>
-              ${balance.amount.toLocaleString("en-US", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-            </Text>
+            <Text style={styles.balanceAmount}>{balance.amount}</Text>
             <Text style={styles.balanceDate}>{balance.nextRenewalDate}</Text>
           </View>
         </View>
@@ -73,11 +75,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    gap: spacing[3],
   },
   user: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    flexShrink: 1,
+    minWidth: 0,
   },
   avatar: {
     width: spacing[16],
@@ -86,12 +90,13 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   userName: {
-    marginLeft: spacing[4],
-    fontSize: 24,
-    lineHeight: 32,
+    flex: 1,
+    marginLeft: spacing[3],
+    marginRight: spacing[2],
+    fontSize: 20,
+    lineHeight: 26,
     fontFamily: "sans-bold",
     color: colors.primary,
-    flexShrink: 1,
   },
   addButton: {
     width: spacing[12],
@@ -101,6 +106,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     alignItems: "center",
     justifyContent: "center",
+    flexShrink: 0,
   },
   addIcon: {
     width: spacing[6],
