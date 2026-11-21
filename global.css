@@ -77,10 +77,14 @@
 
     .home-user {
         @apply flex-row items-center;
+        flex-direction: row;
+        align-items: center;
     }
 
     .home-avatar {
-        @apply size-16 rounded-full;
+        @apply rounded-full overflow-hidden;
+        width: var(--spacing-16);
+        height: var(--spacing-16);
     }
 
     .home-user-name {
@@ -88,7 +92,8 @@
     }
 
     .home-add-icon {
-        @apply size-12;
+        width: var(--spacing-12);
+        height: var(--spacing-12);
     }
 
     .home-balance-card {
