@@ -13,6 +13,7 @@ import { formatCurrency, formatDate } from "@/constants/lib/utils";
 import { colors, spacing } from "@/constants/them";
 import { Image as ExpoImage } from "expo-image";
 import { styled } from "nativewind";
+import { useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView as RNSSafeAreaView } from "react-native-safe-area-context";
 
@@ -39,6 +40,8 @@ const balance = {
 };
 
 export default function App() {
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
   return (
     <SafeAreaView className="flex-1 bg-background">
       <View className="p-5">
@@ -113,8 +116,16 @@ export default function App() {
                 category={item.category}
                 plan={item.plan}
                 renewalDate={item.renewalDate}
-                expanded={false}
-                onPress={() => {}}
+                paymentMethod={item.paymentMethod}
+                status={item.status}
+                startDate={item.startDate}
+                expanded={expandedId === item.id}
+                onPress={() =>
+                  setExpandedId((current) =>
+                    current === item.id ? null : item.id,
+                  )
+                }
+                onCancelPress={() => {}}
               />
             )}
             ListEmptyComponent={
