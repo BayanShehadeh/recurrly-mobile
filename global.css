@@ -4,6 +4,11 @@
 
 @import "nativewind/theme";
 
+/* Ensure Tailwind/NativeWind scans app + components for className usage */
+@source "./app/**/*.{js,jsx,ts,tsx}";
+@source "./components/**/*.{js,jsx,ts,tsx}";
+@source "./constants/**/*.{js,jsx,ts,tsx}";
+
 @theme {
     --color-background: #fff9e3;
     --color-foreground: #081126;
