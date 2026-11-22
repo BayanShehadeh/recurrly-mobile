@@ -1,13 +1,19 @@
 import ListHeading from "@/components/ListHeading";
+import SubscriptionCard from "@/components/SubscriptionCard";
 import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
-import { HOME_BALANCE, HOME_USER, UPCOMING_SUBSCRIPTIONS } from "@/constants/data";
+import {
+  HOME_BALANCE,
+  HOME_SUBSCRIPTIONS,
+  HOME_USER,
+  UPCOMING_SUBSCRIPTIONS,
+} from "@/constants/data";
 import { icons } from "@/constants/icon";
 import images from "@/constants/images";
 import { formatCurrency, formatDate } from "@/constants/lib/utils";
 import { colors, spacing } from "@/constants/them";
 import { Image as ExpoImage } from "expo-image";
 import { styled } from "nativewind";
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView as RNSSafeAreaView } from "react-native-safe-area-context";
 
 const SafeAreaView = styled(RNSSafeAreaView);
@@ -71,31 +77,49 @@ export default function App() {
 
         <View>
           <ListHeading title="Upcoming" />
-          <UpcomingSubscriptionCard data={UPCOMING_SUBSCRIPTIONS[0]} />
+          <FlatList
+            data={UPCOMING_SUBSCRIPTIONS}
+            keyExtractor={(item) => item.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <UpcomingSubscriptionCard data={item} />
+            )}
+            ListEmptyComponent={
+              <Text style={styles.emptyState}>
+                No upcoming renewals yet.
+              </Text>
+            }
+          />
         </View>
 
 
 
         <View>
           <ListHeading title="All Subscriptions" />
+          <FlatList
+            data={HOME_SUBSCRIPTIONS}
+            keyExtractor={(item) => item.id}
+            scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <SubscriptionCard
+                name={item.name}
+                price={item.price}
+                currency={item.currency}
+                icon={item.icon}
+                billing={item.billing}
+                expanded={false}
+                onPress={() => {}}
+              />
+            )}
+            ListEmptyComponent={
+              <Text style={styles.emptyState}>
+                No subscriptions yet.
+              </Text>
+            }
+          />
         </View>
-
-
-
-
-
-       
-
-
-
-
-
-
-
-
-
-
-
       </View>
     </SafeAreaView>
   );
@@ -178,5 +202,11 @@ const styles = StyleSheet.create({
     lineHeight: 28,
     fontFamily: "sans-medium",
     color: "#ffffff",
+  },
+  emptyState: {
+    paddingVertical: spacing[4],
+    fontSize: 14,
+    fontFamily: "sans-medium",
+    color: "rgba(0,0,0,0.6)",
   },
 });
