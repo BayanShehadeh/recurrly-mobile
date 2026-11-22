@@ -1,10 +1,10 @@
-import { HOME_BALANCE, HOME_USER } from "@/constants/data";
+import ListHeading from "@/components/ListHeading";
+import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
+import { HOME_BALANCE, HOME_USER, UPCOMING_SUBSCRIPTIONS } from "@/constants/data";
 import { icons } from "@/constants/icon";
 import images from "@/constants/images";
 import { formatCurrency, formatDate } from "@/constants/lib/utils";
 import { colors, spacing } from "@/constants/them";
-import ListHeading from "@/components/ListHeading";
-import UpcomingSubscriptionCard from "@/components/UpcomingSubscriptionCard";
 import { Image as ExpoImage } from "expo-image";
 import { styled } from "nativewind";
 import { StyleSheet, Text, View } from "react-native";
@@ -71,6 +71,7 @@ export default function App() {
 
         <View>
           <ListHeading title="Upcoming" />
+          <UpcomingSubscriptionCard data={UPCOMING_SUBSCRIPTIONS[0]} />
         </View>
 
 
