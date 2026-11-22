@@ -1,20 +1,20 @@
-import type { ImageSourcePropType } from "react-native";
+import type { ImageSource } from "expo-image";
 
 declare global {
     interface AppTab {
         name: string;
         title: string;
-        icon: ImageSourcePropType;
+        icon: ImageSource;
     }
 
     interface TabIconProps {
         focused: boolean;
-        icon: ImageSourcePropType;
+        icon: ImageSource;
     }
 
     interface Subscription {
         id: string;
-        icon: ImageSourcePropType;
+        icon: ImageSource;
         name: string;
         plan?: string;
         category?: string;
@@ -37,7 +37,7 @@ declare global {
 
     interface UpcomingSubscription {
         id: string;
-        icon: ImageSourcePropType;
+        icon: ImageSource;
         name: string;
         price: number;
         currency?: string;
