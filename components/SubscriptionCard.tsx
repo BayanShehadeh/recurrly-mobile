@@ -1,4 +1,4 @@
-import { formatCurrency } from "@/constants/lib/utils";
+import { formatCurrency, formatDate } from "@/constants/lib/utils";
 import { colors, spacing } from "@/constants/them";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View } from "react-native";
@@ -9,9 +9,18 @@ const SubscriptionCard = ({
   currency,
   icon,
   billing,
+  color,
+  category,
+  plan,
+  renewalDate,
 }: SubscriptionCardProps) => {
+  const meta =
+    category?.trim() ||
+    plan?.trim() ||
+    (renewalDate ? formatDate(renewalDate) : "");
+
   return (
-    <View style={styles.card}>
+    <View style={[styles.card, color ? { backgroundColor: color } : null]}>
       <View style={styles.head}>
         <View style={styles.main}>
           <Image source={icon} style={styles.icon} contentFit="cover" />
@@ -19,6 +28,11 @@ const SubscriptionCard = ({
             <Text numberOfLines={1} style={styles.title}>
               {name}
             </Text>
+            {!!meta && (
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.meta}>
+                {meta}
+              </Text>
+            )}
           </View>
         </View>
 
@@ -70,6 +84,12 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     fontFamily: "sans-bold",
     color: colors.primary,
+  },
+  meta: {
+    fontSize: 14,
+    lineHeight: 18,
+    fontFamily: "sans-semibold",
+    color: colors.mutedForeground,
   },
   priceBox: {
     marginLeft: spacing[3],

@@ -109,6 +109,10 @@ export default function App() {
                 currency={item.currency}
                 icon={item.icon}
                 billing={item.billing}
+                color={item.color}
+                category={item.category}
+                plan={item.plan}
+                renewalDate={item.renewalDate}
                 expanded={false}
                 onPress={() => {}}
               />
