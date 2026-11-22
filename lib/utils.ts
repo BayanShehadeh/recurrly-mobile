@@ -37,3 +37,14 @@ export function formatCurrency(
     maximumFractionDigits: 2,
   }).format(amount);
 }
+
+/**
+ * Formats a subscription status for UI display.
+ * Example: "active" / "past_due" → "Active" / "Past Due".
+ */
+export function formatStatusLabel(status: string): string {
+  return status
+    .trim()
+    .replace(/[_-]+/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
+}
