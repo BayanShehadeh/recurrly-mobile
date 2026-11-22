@@ -9,7 +9,7 @@ import {
 } from "@/constants/data";
 import { icons } from "@/constants/icon";
 import images from "@/constants/images";
-import { formatCurrency, formatDate } from "@/constants/lib/utils";
+import { formatCurrency, formatDate } from "@/lib/utils";
 import { colors, spacing } from "@/constants/them";
 import { Image as ExpoImage } from "expo-image";
 import { styled } from "nativewind";

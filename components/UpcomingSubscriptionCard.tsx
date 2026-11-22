@@ -1,4 +1,4 @@
-import { formatCurrency } from "@/constants/lib/utils";
+import { formatCurrency } from "@/lib/utils";
 import { colors, spacing } from "@/constants/them";
 import { Image } from "expo-image";
 import { StyleSheet, Text, View } from "react-native";
