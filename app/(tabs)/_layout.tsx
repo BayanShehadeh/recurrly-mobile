@@ -1,51 +1,29 @@
 import { tabs } from '@/constants/data';
 import { colors, components } from '@/constants/them';
-import clsx from 'clsx';
-import { Image as ExpoImage } from 'expo-image';
+import { Image } from 'expo-image';
 import { Tabs } from 'expo-router';
-import { styled } from 'nativewind';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const tabBar = components.tabBar;
-const Image = styled(ExpoImage);
 
-export default function TabsLayout() {
-  const insets = useSafeAreaInsets();
-
-  const TabIcon = ({ focused, icon }: TabIconProps) => (
-    <View
-      className="tabs-icon"
-      style={{
-        width: tabBar.iconFrame,
-        height: tabBar.iconFrame,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
+function TabIcon({ focused, icon }: TabIconProps) {
+  return (
+    <View style={styles.iconFrame}>
       <View
-        className={clsx('tabs-pill', focused && 'tabs-active')}
-        style={{
-          width: tabBar.iconFrame,
-          height: tabBar.iconFrame,
-          borderRadius: tabBar.iconFrame / 2,
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: focused ? colors.accent : 'transparent',
-        }}
+        style={[
+          styles.pill,
+          focused && { backgroundColor: colors.accent },
+        ]}
       >
-        <Image
-          source={icon}
-          className="tabs-glyph"
-          contentFit="contain"
-          style={{
-            width: tabBar.iconFrame / 2,
-            height: tabBar.iconFrame / 2,
-          }}
-        />
+        <Image source={icon} style={styles.glyph} contentFit="contain" />
       </View>
     </View>
   );
+}
+
+export default function TabsLayout() {
+  const insets = useSafeAreaInsets();
 
   return (
     <Tabs
@@ -55,15 +33,15 @@ export default function TabsLayout() {
         tabBarStyle: {
           position: 'absolute',
           bottom: Math.max(insets.bottom, tabBar.horizontalInset),
-        height: tabBar.height,
-        marginHorizontal: tabBar.horizontalInset,
-        borderRadius: tabBar.radius,
-        backgroundColor: colors.primary,
-        borderTopWidth: 0,
-        elevation: 0,
+          height: tabBar.height,
+          marginHorizontal: tabBar.horizontalInset,
+          borderRadius: tabBar.radius,
+          backgroundColor: colors.primary,
+          borderTopWidth: 0,
+          elevation: 0,
         },
         tabBarItemStyle: {
-          paddingVertical: tabBar.height/2-tabBar.iconFrame/1.6,
+          paddingVertical: tabBar.height / 2 - tabBar.iconFrame / 1.6,
         },
         tabBarIconStyle: {
           width: tabBar.iconFrame,
@@ -87,3 +65,25 @@ export default function TabsLayout() {
     </Tabs>
   );
 }
+
+const styles = StyleSheet.create({
+  iconFrame: {
+    width: tabBar.iconFrame,
+    height: tabBar.iconFrame,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  pill: {
+    width: tabBar.iconFrame,
+    height: tabBar.iconFrame,
+    borderRadius: tabBar.iconFrame / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    overflow: 'hidden',
+  },
+  glyph: {
+    width: tabBar.iconFrame / 2,
+    height: tabBar.iconFrame / 2,
+  },
+});

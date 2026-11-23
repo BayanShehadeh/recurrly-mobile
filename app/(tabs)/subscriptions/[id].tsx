@@ -1,21 +1,39 @@
+import { colors, spacing } from '@/constants/them';
 import { useLocalSearchParams } from 'expo-router';
-import { styled } from 'nativewind';
-import React from 'react';
-import { Text, View } from 'react-native';
-import { SafeAreaView as RNSSafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const SafeAreaView = styled(RNSSafeAreaView);
-
-const SubscriptionDetails = () => {
-  const { id } = useLocalSearchParams();
+export default function SubscriptionDetails() {
+  const { id } = useLocalSearchParams<{ id: string }>();
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <View className="flex-1 p-5">
-        <Text>Subscription Details</Text>
+    <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
+      <View style={styles.content}>
+        <Text style={styles.title}>Subscription Details</Text>
+        {!!id && <Text style={styles.meta}>ID: {String(id)}</Text>}
       </View>
     </SafeAreaView>
   );
-};
+}
 
-export default SubscriptionDetails;
+const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  content: {
+    flex: 1,
+    padding: spacing[5],
+    gap: spacing[2],
+  },
+  title: {
+    fontSize: 24,
+    fontFamily: 'sans-bold',
+    color: colors.primary,
+  },
+  meta: {
+    fontSize: 14,
+    fontFamily: 'sans-medium',
+    color: colors.mutedForeground,
+  },
+});

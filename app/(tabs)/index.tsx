@@ -9,24 +9,18 @@ import {
 } from "@/constants/data";
 import { icons } from "@/constants/icon";
 import images from "@/constants/images";
-import { formatCurrency, formatDate } from "@/lib/utils";
 import { colors, spacing } from "@/constants/them";
-import { Image as ExpoImage } from "expo-image";
-import { styled } from "nativewind";
+import { formatCurrency, formatDate } from "@/lib/utils";
+import { Image } from "expo-image";
 import { useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView as RNSSafeAreaView } from "react-native-safe-area-context";
-
-const SafeAreaView = styled(RNSSafeAreaView);
-const Image = styled(ExpoImage, {
-  className: {
-    target: "style",
-    nativeStyleMapping: {
-      width: true,
-      height: true,
-    },
-  },
-});
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 // Later: replace with user data from the database
 const user = {
@@ -39,12 +33,15 @@ const balance = {
   nextRenewalDate: formatDate(HOME_BALANCE.nextRenewalDate),
 };
 
-export default function App() {
+export default function HomeScreen() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
-      <View className="p-5">
+    <SafeAreaView style={styles.safe} edges={["top", "left", "right"]}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.header}>
           <View style={styles.user}>
             <Image source={user.avatar} style={styles.avatar} />
@@ -58,13 +55,13 @@ export default function App() {
             </Text>
           </View>
 
-          <View style={styles.addButton}>
+          <Pressable style={styles.addButton} accessibilityRole="button">
             <Image
               source={icons.plus}
               style={styles.addIcon}
               contentFit="contain"
             />
-          </View>
+          </Pressable>
         </View>
 
         <View style={styles.balanceCard}>
@@ -76,71 +73,69 @@ export default function App() {
           </View>
         </View>
 
-
-
         <View>
           <ListHeading title="Upcoming" />
-          <FlatList
-            data={UPCOMING_SUBSCRIPTIONS}
-            keyExtractor={(item) => item.id}
+          <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <UpcomingSubscriptionCard data={item} />
+            contentContainerStyle={styles.upcomingRow}
+          >
+            {UPCOMING_SUBSCRIPTIONS.length === 0 ? (
+              <Text style={styles.emptyState}>No upcoming renewals yet.</Text>
+            ) : (
+              UPCOMING_SUBSCRIPTIONS.map((item) => (
+                <UpcomingSubscriptionCard key={item.id} data={item} />
+              ))
             )}
-            ListEmptyComponent={
-              <Text style={styles.emptyState}>
-                No upcoming renewals yet.
-              </Text>
-            }
-          />
+          </ScrollView>
         </View>
 
-
-
-        <View>
+        <View style={styles.subscriptionsSection}>
           <ListHeading title="All Subscriptions" />
-          <FlatList
-            data={HOME_SUBSCRIPTIONS}
-            keyExtractor={(item) => item.id}
-            scrollEnabled={false}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <SubscriptionCard
-                name={item.name}
-                price={item.price}
-                currency={item.currency}
-                icon={item.icon}
-                billing={item.billing}
-                color={item.color}
-                category={item.category}
-                plan={item.plan}
-                renewalDate={item.renewalDate}
-                paymentMethod={item.paymentMethod}
-                status={item.status}
-                startDate={item.startDate}
-                expanded={expandedId === item.id}
-                onPress={() =>
-                  setExpandedId((current) =>
-                    current === item.id ? null : item.id,
-                  )
-                }
-                onCancelPress={() => {}}
-              />
-            )}
-            ListEmptyComponent={
-              <Text style={styles.emptyState}>
-                No subscriptions yet.
-              </Text>
-            }
-          />
+          {HOME_SUBSCRIPTIONS.length === 0 ? (
+            <Text style={styles.emptyState}>No subscriptions yet.</Text>
+          ) : (
+            HOME_SUBSCRIPTIONS.map((item) => (
+              <View key={item.id} style={styles.subscriptionItem}>
+                <SubscriptionCard
+                  name={item.name}
+                  price={item.price}
+                  currency={item.currency}
+                  icon={item.icon}
+                  billing={item.billing}
+                  color={item.color}
+                  category={item.category}
+                  plan={item.plan}
+                  renewalDate={item.renewalDate}
+                  paymentMethod={item.paymentMethod}
+                  status={item.status}
+                  startDate={item.startDate}
+                  expanded={expandedId === item.id}
+                  onPress={() =>
+                    setExpandedId((current) =>
+                      current === item.id ? null : item.id,
+                    )
+                  }
+                  onCancelPress={() => {}}
+                />
+              </View>
+            ))
+          )}
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safe: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  scrollContent: {
+    paddingHorizontal: spacing[5],
+    paddingBottom: spacing[30],
+  },
   header: {
     marginBottom: spacing[2] + 2,
     flexDirection: "row",
@@ -217,6 +212,16 @@ const styles = StyleSheet.create({
     lineHeight: 28,
     fontFamily: "sans-medium",
     color: "#ffffff",
+  },
+  upcomingRow: {
+    flexDirection: "row",
+    alignItems: "stretch",
+  },
+  subscriptionsSection: {
+    paddingBottom: spacing[4],
+  },
+  subscriptionItem: {
+    marginBottom: spacing[3],
   },
   emptyState: {
     paddingVertical: spacing[4],

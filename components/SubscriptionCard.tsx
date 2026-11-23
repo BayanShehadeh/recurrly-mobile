@@ -1,7 +1,7 @@
+import { colors, spacing } from "@/constants/them";
 import { formatCurrency, formatDate, formatStatusLabel } from "@/lib/utils";
-import clsx from "clsx";
 import { Image } from "expo-image";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const DETAIL_DATE_FORMAT = "MMM D, YYYY";
 
@@ -53,39 +53,43 @@ const SubscriptionCard = ({
   return (
     <Pressable
       onPress={onPress}
-      className={clsx("sub-card", expanded ? "sub-card-expanded" : "bg-card")}
-      style={!expanded && color ? { backgroundColor: color } : undefined}
+      style={[
+        styles.card,
+        expanded
+          ? styles.cardExpanded
+          : { backgroundColor: color ?? colors.card },
+      ]}
     >
-      <View className="sub-head">
-        <View className="sub-main">
-          <Image source={icon} className="sub-icon" contentFit="cover" />
-          <View className="sub-copy">
-            <Text numberOfLines={1} className="sub-title">
+      <View style={styles.head}>
+        <View style={styles.main}>
+          <Image source={icon} style={styles.icon} contentFit="cover" />
+          <View style={styles.copy}>
+            <Text numberOfLines={1} style={styles.title}>
               {name}
             </Text>
             {!!meta && (
-              <Text numberOfLines={1} ellipsizeMode="tail" className="sub-meta">
+              <Text numberOfLines={1} ellipsizeMode="tail" style={styles.meta}>
                 {meta}
               </Text>
             )}
           </View>
         </View>
 
-        <View className="sub-price-box">
-          <Text className="sub-price">{formatCurrency(price, currency)}</Text>
-          <Text className="sub-billing">{billing}</Text>
+        <View style={styles.priceBox}>
+          <Text style={styles.price}>{formatCurrency(price, currency)}</Text>
+          <Text style={styles.billing}>{billing}</Text>
         </View>
       </View>
 
       {expanded && (
-        <View className="sub-body">
-          <View className="sub-details">
+        <View style={styles.body}>
+          <View style={styles.details}>
             {details.map((row) => (
-              <View key={row.label} className="sub-row">
-                <View className="sub-row-copy">
-                  <Text className="sub-label">{row.label}:</Text>
+              <View key={row.label} style={styles.row}>
+                <View style={styles.rowCopy}>
+                  <Text style={styles.label}>{row.label}:</Text>
                   <Text
-                    className="sub-value"
+                    style={styles.value}
                     numberOfLines={1}
                     ellipsizeMode="tail"
                   >
@@ -100,12 +104,12 @@ const SubscriptionCard = ({
             <Pressable
               onPress={onCancelPress}
               disabled={isCancelling}
-              className={clsx(
-                "sub-cancel",
-                isCancelling && "sub-cancel-disabled",
-              )}
+              style={[
+                styles.cancel,
+                isCancelling && styles.cancelDisabled,
+              ]}
             >
-              <Text className="sub-cancel-text">
+              <Text style={styles.cancelText}>
                 {isCancelling ? "Cancelling..." : "Cancel Subscription"}
               </Text>
             </Pressable>
@@ -117,3 +121,112 @@ const SubscriptionCard = ({
 };
 
 export default SubscriptionCard;
+
+const styles = StyleSheet.create({
+  card: {
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing[4],
+  },
+  cardExpanded: {
+    backgroundColor: colors.subscription,
+  },
+  head: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: spacing[2],
+  },
+  main: {
+    minWidth: 0,
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing[3],
+  },
+  icon: {
+    width: spacing[16],
+    height: spacing[16],
+    borderRadius: spacing[2],
+  },
+  copy: {
+    minWidth: 0,
+    flex: 1,
+  },
+  title: {
+    marginBottom: spacing[1],
+    fontSize: 18,
+    lineHeight: 24,
+    fontFamily: "sans-bold",
+    color: colors.primary,
+  },
+  meta: {
+    fontSize: 14,
+    lineHeight: 18,
+    fontFamily: "sans-semibold",
+    color: colors.mutedForeground,
+  },
+  priceBox: {
+    marginLeft: spacing[3],
+    flexShrink: 0,
+    alignItems: "flex-end",
+  },
+  price: {
+    marginBottom: spacing[1],
+    fontSize: 18,
+    lineHeight: 24,
+    fontFamily: "sans-bold",
+    color: colors.primary,
+  },
+  billing: {
+    fontSize: 14,
+    lineHeight: 18,
+    fontFamily: "sans-medium",
+    color: colors.mutedForeground,
+  },
+  body: {
+    marginTop: spacing[6],
+    gap: spacing[4],
+  },
+  details: {
+    gap: spacing[6],
+  },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: spacing[3],
+  },
+  rowCopy: {
+    minWidth: 0,
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing[2],
+  },
+  label: {
+    flexShrink: 0,
+    fontSize: 16,
+    fontFamily: "sans-medium",
+    color: colors.mutedForeground,
+  },
+  value: {
+    flex: 1,
+    fontFamily: "sans-bold",
+    color: colors.primary,
+  },
+  cancel: {
+    marginTop: spacing[2],
+    alignItems: "center",
+    borderRadius: 999,
+    backgroundColor: colors.primary,
+    paddingVertical: spacing[4],
+  },
+  cancelDisabled: {
+    backgroundColor: "rgba(8,17,38,0.35)",
+  },
+  cancelText: {
+    fontFamily: "sans-bold",
+    color: colors.background,
+  },
+});
