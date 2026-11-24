@@ -13,7 +13,7 @@ SplashScreen.preventAutoHideAsync().catch(() => {
 });
 
 export const unstable_settings = {
-  initialRouteName: '(tabs)',
+  anchor: 'index',
 };
 
 export default function RootLayout() {
