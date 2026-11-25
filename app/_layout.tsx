@@ -1,4 +1,4 @@
-import { ClerkProvider } from '@clerk/expo';
+import { ClerkProvider, useAuth } from '@clerk/expo';
 import { tokenCache } from '@clerk/expo/token-cache';
 import { colors } from '@/constants/them';
 import { useFonts } from 'expo-font';
@@ -10,10 +10,12 @@ import { View } from 'react-native';
 import 'react-native-reanimated';
 import '../global.css';
 
-const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY ?? "";
+const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY ?? '';
 
 if (!publishableKey) {
-  throw new Error("Missing EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY. Add your key to .env.\nRun: 1) clerk auth login  2) clerk link  3) clerk env pull — then restart the dev server.");
+  throw new Error(
+    'Missing EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY. Add your key to .env.\nRun: 1) clerk auth login  2) clerk link  3) clerk env pull — then restart the dev server.',
+  );
 }
 
 SplashScreen.preventAutoHideAsync().catch(() => {
@@ -24,7 +26,8 @@ export const unstable_settings = {
   anchor: 'index',
 };
 
-export default function RootLayout() {
+function RootLayoutContent() {
+  const { isLoaded: authLoaded } = useAuth();
   const [fontsLoaded, fontError] = useFonts({
     'sans-regular': require('../assets/fonts/PlusJakartaSans-Regular.ttf'),
     'sans-medium': require('../assets/fonts/PlusJakartaSans-Medium.ttf'),
@@ -34,7 +37,7 @@ export default function RootLayout() {
     'sans-light': require('../assets/fonts/PlusJakartaSans-Light.ttf'),
   });
 
-  const ready = fontsLoaded || !!fontError;
+  const ready = (fontsLoaded || !!fontError) && authLoaded;
 
   useEffect(() => {
     if (ready) {
@@ -47,16 +50,22 @@ export default function RootLayout() {
   }
 
   return (
+    <>
+      <Stack>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="onboarding" options={{ title: 'Onboarding' }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      </Stack>
+      <StatusBar style="dark" />
+    </>
+  );
+}
+
+export default function RootLayout() {
+  return (
     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-      <>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="onboarding" options={{ title: 'Onboarding' }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        </Stack>
-        <StatusBar style="dark" />
-      </>
+      <RootLayoutContent />
     </ClerkProvider>
   );
 }
