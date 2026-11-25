@@ -344,7 +344,7 @@
 }
 
 @utility auth-button-text {
-    @apply text-base font-sans-bold text-primary;
+    @apply text-base font-sans-bold text-background;
 }
 
 @utility auth-secondary-button {
